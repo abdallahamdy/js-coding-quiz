@@ -9,9 +9,14 @@ var displayQuizQuestions = function(){
     
     var questionEl = document.createElement("h1");
     questionEl.className = "the-question";
-    questionEl.textContent = "7ayak allah a5ooy"
+    questionEl.textContent = "Question?"
+
+    var theChoices = document.createElement("button");
+    theChoices.className = "btn";
+    theChoices.textContent = "1. answer";
 
     questionPageEl.appendChild(questionEl);
+    questionPageEl.appendChild(theChoices);
 
     pageContentEl.appendChild(questionPageEl);
 
