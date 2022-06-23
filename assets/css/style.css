@@ -12,7 +12,7 @@ body {
     font-family: sans-serif, Verdana, Geneva, Tahoma;
 }
 
-.intro-page {
+.main-page {
     text-align: center;
     padding-left: 25%;
     padding-right: 25%;
@@ -22,12 +22,24 @@ body {
     align-items: center;
 }
 
-.intro-page h1 {
+.question-page {
+    text-align: left;
+    padding-left: 25%;
+    padding-right: 25%;
+}
+
+.main-page h1 {
     font-size: 58px;
 }
 
-.intro-page h3 {
+.main-page h3 {
     font-size: 28px;
+}
+
+.the-question { 
+    font-size: 48px;
+    color: red;
+    /* text-align: left; */
 }
 
 .btn {
