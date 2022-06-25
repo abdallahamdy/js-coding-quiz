@@ -139,6 +139,33 @@ var displayScorePage = function(){
     pageContentEl.appendChild(scoreDivEl);
 }
 
+var correctAnswerDisplay = function(){
+    if(questionCounter == 5){
+        return;
+    }
+    var questionPageElement = document.querySelector('.question-page');
+
+    var correctEl = document.createElement('h3');
+    correctEl.className = "result";
+    correctEl.textContent = "Correct!"
+
+    questionPageElement.appendChild(correctEl);
+    
+}
+
+var wrongAnswerDisplay = function(){
+    if(questionCounter == 5){
+        return;
+    }
+    var questionPageElement = document.querySelector('.question-page');
+
+    var wrongEl = document.createElement('h3');
+    wrongEl.className = "result";
+    wrongEl.textContent = "Wrong!"
+
+    questionPageElement.appendChild(wrongEl);
+}
+
 var clearQuestionPage = function(){
     var questionPage = document.querySelector(".question-page");
     var theQuestion = document.querySelector(".the-question");
@@ -194,12 +221,17 @@ var answerBtnHandler = function(event){
         case "choice-a":
             if(correctAnswer == "1"){
                 console.log("Correct answer");
+                questionCounter++;
+                clearQuestionPage();
+                displayQuizQuestions();
+                correctAnswerDisplay();
             }else{
                 console.log("Wrong answer.");
                 questionCounter++;
                 countdown = countdown - 10;
                 clearQuestionPage();
                 displayQuizQuestions();
+                wrongAnswerDisplay();
                 // if wrong, decrement timer and append a wrong answer element to next page.
             }
             break;
@@ -209,12 +241,14 @@ var answerBtnHandler = function(event){
                 questionCounter++;
                 clearQuestionPage();
                 displayQuizQuestions();
+                correctAnswerDisplay();
             }else{
                 console.log("Wrong answer.");
                 questionCounter++;
                 countdown = countdown - 10;
                 clearQuestionPage();
                 displayQuizQuestions();
+                wrongAnswerDisplay();
             }
             break;
         case "choice-c":
@@ -223,12 +257,14 @@ var answerBtnHandler = function(event){
                 questionCounter++;
                 clearQuestionPage();
                 displayQuizQuestions();
+                correctAnswerDisplay();
             }else{
                 console.log("Wrong answer.");
                 questionCounter++;
                 countdown = countdown - 10;
                 clearQuestionPage();
                 displayQuizQuestions();
+                wrongAnswerDisplay();
             }
             break;
         case "choice-d":
@@ -237,12 +273,14 @@ var answerBtnHandler = function(event){
                 questionCounter++;
                 clearQuestionPage();
                 displayQuizQuestions();
+                correctAnswerDisplay();
             }else{
                 console.log("Wrong answer.");
                 questionCounter++;
                 countdown = countdown - 10;
                 clearQuestionPage();
                 displayQuizQuestions();
+                wrongAnswerDisplay();
             }
             break;
     }
