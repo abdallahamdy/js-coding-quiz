@@ -9,15 +9,6 @@ var finalScore = 0;
 var questionCounter = 0;
 var countdown = 75;
 
-var mcQuestion = {
-    question: "",
-    choiceA: "",
-    choiceB: "",
-    choiceC: "",
-    choiceD: "",
-    answer: ""
-}
-
 var quizQuestions = [
     "Commonly used data types do NOT include:",
     "The condition in an if / else statement is enclosed with _______.",
