@@ -4,6 +4,7 @@ var introPageEl = document.querySelector(".main-page");
 var secondsCounterEl = document.querySelector(".seconds-counter");
 
 var timeInterval;
+var finalScore = 0;
 
 var questionCounter = 0;
 var countdown = 75;
@@ -123,10 +124,26 @@ var displayScorePage = function(){
     doneMessageEl.textContent = "All done!";
 
     var scoreEl = document.createElement("p");
-    scoreEl.textContent = "Your final score is: ";
+    scoreEl.textContent = "Your final score is: " + finalScore;
+
+    // var initialsEl = document.createElement("submit");
+    // initialsEl.textContent
+    var labelEl = document.createElement("label");
+    labelEl.textContent = "Enter your initials: ";
+
+    var inputEl = document.createElement("input");
+    inputEl.type = "text";
+
+    var buttonEl = document.createElement("button");
+    buttonEl.className = "submitBtn";
+    buttonEl.type = "submit";
+    buttonEl.textContent = "Submit";
 
     scoreDivEl.appendChild(doneMessageEl);
     scoreDivEl.appendChild(scoreEl);
+    scoreDivEl.appendChild(labelEl);
+    scoreDivEl.appendChild(inputEl);
+    scoreDivEl.appendChild(buttonEl);
     pageContentEl.appendChild(scoreDivEl);
 }
 
@@ -146,6 +163,10 @@ var startCounter = function(){
     countdown--;
     if(countdown <= 0 || questionCounter == 5){
         secondsCounterEl.innerHTML = "Time: 0";
+        finalScore = countdown;
+        if(finalScore < 0){
+            finalScore = 0; 
+        }
         clearQuestionPage();
         displayScorePage();
         clearInterval(timeInterval);
@@ -231,5 +252,9 @@ var answerBtnHandler = function(event){
 
 }
 
+var submitScore = function(event){
+}
+
 startQuizBtn.addEventListener("click", startQuizHandler);
 pageContentEl.addEventListener("click", answerBtnHandler);
+pageContentEl.addEventListener("click", submitScore);
