@@ -11,10 +11,6 @@ var questionCounter = 0;
 var countdown = 75;
 
 var highScores = [];
-// var player = {
-//     name: "",
-//     score: ""
-// }
 
 var quizQuestions = [
     "Commonly used data types do NOT include:",
@@ -87,19 +83,19 @@ var displayQuizQuestions = function(){
     questionEl.textContent = questionObjectsArr[questionCounter].question;
 
     var firstChoice = document.createElement("button");
-    firstChoice.className = "btn choice-a";
+    firstChoice.className = "btn choice-a choice";
     firstChoice.textContent = questionObjectsArr[questionCounter].choiceA;
 
     var secondChoice = document.createElement("button");
-    secondChoice.className = "btn choice-b";
+    secondChoice.className = "btn choice-b choice";
     secondChoice.textContent = questionObjectsArr[questionCounter].choiceB;
 
     var thirdChoice = document.createElement("button");
-    thirdChoice.className = "btn choice-c";
+    thirdChoice.className = "btn choice-c choice";
     thirdChoice.textContent = questionObjectsArr[questionCounter].choiceC;
 
     var fourthChoice = document.createElement("button");
-    fourthChoice.className = "btn choice-d";
+    fourthChoice.className = "btn choice-d choice";
     fourthChoice.textContent = questionObjectsArr[questionCounter].choiceD;
 
     questionPageEl.appendChild(questionEl);
@@ -124,8 +120,6 @@ var displayScorePage = function(){
     var scoreEl = document.createElement("p");
     scoreEl.textContent = "Your final score is: " + finalScore;
 
-    // var initialsEl = document.createElement("submit");
-    // initialsEl.textContent
     var labelEl = document.createElement("label");
     labelEl.textContent = "Enter your initials: ";
 
@@ -148,11 +142,10 @@ var displayScorePage = function(){
 var clearQuestionPage = function(){
     var questionPage = document.querySelector(".question-page");
     var theQuestion = document.querySelector(".the-question");
-    var buttons = document.querySelector(".btn");
+    var buttons = document.querySelector(".choice");
     questionPage.remove();
     theQuestion.remove();
     buttons.remove();
-    // console.log("Array" + questionObjectsArr[questionCounter].question);
 }
 
 var startCounter = function(){
@@ -169,6 +162,7 @@ var startCounter = function(){
         clearInterval(timeInterval);
         finalScore = 0;
         secondsCounterEl.innerHTML = "Time: 0";
+        clearQuestionPage();
         displayScorePage();
     }
 }
@@ -183,6 +177,11 @@ var startQuizHandler = function(){
 }
 
 var answerBtnHandler = function(event){
+
+    if(!event.target.matches(".choice")){
+        return;
+    }
+
     var element = event.target;
     var choice = element.classList[1];
     var correctAnswer = questionObjectsArr[questionCounter].answer;
@@ -198,7 +197,7 @@ var answerBtnHandler = function(event){
             }else{
                 console.log("Wrong answer.");
                 questionCounter++;
-                countdown = countdown - 25;
+                countdown = countdown - 10;
                 clearQuestionPage();
                 displayQuizQuestions();
                 // if wrong, decrement timer and append a wrong answer element to next page.
@@ -213,7 +212,7 @@ var answerBtnHandler = function(event){
             }else{
                 console.log("Wrong answer.");
                 questionCounter++;
-                countdown = countdown - 25;
+                countdown = countdown - 10;
                 clearQuestionPage();
                 displayQuizQuestions();
             }
@@ -227,7 +226,7 @@ var answerBtnHandler = function(event){
             }else{
                 console.log("Wrong answer.");
                 questionCounter++;
-                countdown = countdown - 25;
+                countdown = countdown - 10;
                 clearQuestionPage();
                 displayQuizQuestions();
             }
@@ -241,7 +240,7 @@ var answerBtnHandler = function(event){
             }else{
                 console.log("Wrong answer.");
                 questionCounter++;
-                countdown = countdown - 25;
+                countdown = countdown - 10;
                 clearQuestionPage();
                 displayQuizQuestions();
             }
@@ -251,20 +250,36 @@ var answerBtnHandler = function(event){
 }
 
 var displayHighScores = function (){
-    
-    console.log("Display high scores");
+
+    var scoresDivEl = document.createElement("div");
+    scoresDivEl.className = 'scores-div';
 
     var titleEl = document.createElement("h1");
-    titleEl.textContent = "High Scores";
+    titleEl.textContent = "High Scores:";
 
     var scoresUlEl = document.createElement("ul");
     scoresUlEl.className = "score-list";
 
     for(var i=0; i < highScores.length; i++){
-        console.log(highScores[i]);
+        var scoresListEl = document.createElement("li");
+        scoresListEl.textContent = highScores[i].name + " " + highScores[i].score;
+        scoresUlEl.appendChild(scoresListEl);
     }
 
+    var goBackBtn = document.createElement("button");
+    goBackBtn.classList.add('btn', 'go-back-btn');
+    goBackBtn.textContent = "Main Page";
 
+    var clearScoresBtn = document.createElement("button");
+    clearScoresBtn.classList.add('btn', 'clear-scores-btn');
+    clearScoresBtn.textContent = "Clear Scores";
+
+    scoresDivEl.appendChild(titleEl);
+    scoresDivEl.appendChild(scoresUlEl);
+    scoresDivEl.appendChild(goBackBtn);
+    scoresDivEl.appendChild(clearScoresBtn);
+    pageContentEl.appendChild(scoresDivEl);
+    
 
 }
 
@@ -300,6 +315,38 @@ var submitScore = function(event){
     }
 }
 
+var clearScores = function(event){
+    var element = event.target;
+    if(element.matches(".clear-scores-btn")){
+        console.log("clearing now");
+        localStorage.clear();
+        var scores = document.querySelector(".score-list");
+        if(scores){
+            scores.remove();
+        }
+    }
+}
+
+var backToMain = function(event){
+    var element = event.target;
+    if(element.matches('.go-back-btn')){
+        console.log("MAINMENU");
+        var scorePageEl = document.querySelector(".scores-div");
+        scorePageEl.remove();
+        resetEverything();
+    }
+}
+
+var resetEverything = function(){
+    countdown = 75;
+    questionCounter = 0;
+    introPageEl.style.display = 'flex';
+}
+
 startQuizBtn.addEventListener("click", startQuizHandler);
 pageContentEl.addEventListener("click", answerBtnHandler);
 pageContentEl.addEventListener("click", submitScore);
+pageContentEl.addEventListener("click", clearScores);
+pageContentEl.addEventListener("click", backToMain);
+
+loadScores();
