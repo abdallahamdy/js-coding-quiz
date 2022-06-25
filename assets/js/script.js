@@ -40,7 +40,7 @@ var quizChoices = [
     "2. Curly Brackets",
     "3. Quotes",
     "4. Parenthesis",
-    "2",
+    "3",
     "1. JavaScript",
     "2. Terminal/Bash",
     "3. console.log",
