@@ -53,6 +53,21 @@ body {
     /* text-align: left; */
 }
 
+.score-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.score-page h1 {
+    font-size: 48px;
+}
+
+.score-page p {
+    font-size: 40px;
+}
+
 .btn {
     width: 35%;
     font-size: 24px;

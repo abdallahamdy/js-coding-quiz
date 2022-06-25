@@ -3,8 +3,10 @@ var startQuizBtn = document.querySelector("#start-quiz-btn");
 var introPageEl = document.querySelector(".main-page");
 var secondsCounterEl = document.querySelector(".seconds-counter");
 
+var timeInterval;
+
 var questionCounter = 0;
-var countdown = 5;
+var countdown = 75;
 
 var mcQuestion = {
     question: "",
@@ -55,7 +57,7 @@ var questionObjectsArr = [];
 
 var populateQuestionsArray = function(){
     for(var i = 0; i < quizQuestions.length; i++){
-        var tempObj = mcQuestion;
+        var tempObj = new Object();
         tempObj.question = quizQuestions[i];
 
         var choicesIndexes = i*5;
@@ -66,10 +68,16 @@ var populateQuestionsArray = function(){
         tempObj.answer = quizChoices[choicesIndexes+4];
 
         questionObjectsArr.push(tempObj);
+        
     }
 }
 
 var displayQuizQuestions = function(){
+
+    if(questionCounter == 5){
+        console.log("Game ended!");
+        return;
+    }
 
     var questionPageEl = document.createElement("div");
     questionPageEl.className = "question-page";
@@ -78,7 +86,6 @@ var displayQuizQuestions = function(){
     var questionEl = document.createElement("h1");
     questionEl.className = "the-question";
     questionEl.textContent = questionObjectsArr[questionCounter].question;
-
 
     var firstChoice = document.createElement("button");
     firstChoice.className = "btn choice-a";
@@ -106,27 +113,64 @@ var displayQuizQuestions = function(){
 
 }
 
+var displayScorePage = function(){
+
+    var scoreDivEl = document.createElement("div");
+    scoreDivEl.className = 'score-page';
+
+    var doneMessageEl = document.createElement("h1");
+    doneMessageEl.className = 'done-msg';
+    doneMessageEl.textContent = "All done!";
+
+    var scoreEl = document.createElement("p");
+    scoreEl.textContent = "Your final score is: ";
+
+    scoreDivEl.appendChild(doneMessageEl);
+    scoreDivEl.appendChild(scoreEl);
+    pageContentEl.appendChild(scoreDivEl);
+}
+
+var clearQuestionPage = function(){
+    var questionPage = document.querySelector(".question-page");
+    var theQuestion = document.querySelector(".the-question");
+    var buttons = document.querySelector(".btn");
+    questionPage.remove();
+    theQuestion.remove();
+    buttons.remove();
+    // console.log("Array" + questionObjectsArr[questionCounter].question);
+
+
+}
+
 var startCounter = function(){
     countdown--;
-    secondsCounterEl.innerHTML = "Time: " + countdown;
-    if(countdown == 0){
-        clearInterval();
+    if(countdown <= 0 || questionCounter == 5){
+        secondsCounterEl.innerHTML = "Time: 0";
+        clearQuestionPage();
+        displayScorePage();
+        clearInterval(timeInterval);
+    }else{
+        secondsCounterEl.innerHTML = "Time: " + countdown;
     }
 }
+
 
 var startQuizHandler = function(){
     introPageEl.style.display = 'none';
     populateQuestionsArray();
     displayQuizQuestions();
-    var timeInterval = setInterval(startCounter, 1000);
-    
-    // introPageEl.style.display = 'flex';
+    timeInterval = setInterval(startCounter, 1000);
+    console.log();
 }
 
 var answerBtnHandler = function(event){
     var element = event.target;
     var choice = element.classList[1];
     var correctAnswer = questionObjectsArr[questionCounter].answer;
+    
+    if(correctAnswer === undefined){
+        return;
+    }
 
     switch(choice){
         case "choice-a":
@@ -134,28 +178,53 @@ var answerBtnHandler = function(event){
                 console.log("Correct answer");
             }else{
                 console.log("Wrong answer.");
-                // if wrong, decrement timer and append a wrong answer value to next page.
+                questionCounter++;
+                countdown = countdown - 25;
+                clearQuestionPage();
+                displayQuizQuestions();
+                // if wrong, decrement timer and append a wrong answer element to next page.
             }
             break;
         case "choice-b":
             if(correctAnswer == "2"){
                 console.log("This is correct!");
+                questionCounter++;
+                clearQuestionPage();
+                displayQuizQuestions();
             }else{
                 console.log("Wrong answer.");
+                questionCounter++;
+                countdown = countdown - 25;
+                clearQuestionPage();
+                displayQuizQuestions();
             }
             break;
         case "choice-c":
             if(correctAnswer == "3"){
                 console.log("This is correct!");
+                questionCounter++;
+                clearQuestionPage();
+                displayQuizQuestions();
             }else{
                 console.log("Wrong answer.");
+                questionCounter++;
+                countdown = countdown - 25;
+                clearQuestionPage();
+                displayQuizQuestions();
             }
             break;
         case "choice-d":
             if(correctAnswer == "4"){
                 console.log("This is correct!");
+                questionCounter++;
+                clearQuestionPage();
+                displayQuizQuestions();
             }else{
                 console.log("Wrong answer.");
+                questionCounter++;
+                countdown = countdown - 25;
+                clearQuestionPage();
+                displayQuizQuestions();
             }
             break;
     }
