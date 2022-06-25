@@ -341,6 +341,7 @@ var resetEverything = function(){
     countdown = 75;
     questionCounter = 0;
     introPageEl.style.display = 'flex';
+    secondsCounterEl.innerHTML = "Time: 0";
 }
 
 startQuizBtn.addEventListener("click", startQuizHandler);
