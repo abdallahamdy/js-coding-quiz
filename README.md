@@ -1,7 +1,7 @@
 # js-coding-quiz
 
 ## Purpose
-A javascript quiz that saves highscores using local storage.
+A javascript quiz. Uses localstorage and Web APIs.
 
 ## Built with: 
 * CSS
