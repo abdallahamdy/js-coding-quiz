@@ -3,6 +3,7 @@ var startQuizBtn = document.querySelector("#start-quiz-btn");
 var introPageEl = document.querySelector(".main-page");
 var secondsCounterEl = document.querySelector(".seconds-counter");
 var bodyEl = document.querySelector(".the-body");
+var scoresPageEl = document.querySelector(".scores-page");
 
 var timeInterval;
 var finalScore = 0;
@@ -50,6 +51,9 @@ var quizChoices = [
 
 var questionObjectsArr = [];
 
+// gets called after the start button is clicked
+// create objects containing a question, 4 relevant choices and correct choice number 
+// add each object to an array
 var populateQuestionsArray = function(){
     for(var i = 0; i < quizQuestions.length; i++){
         var tempObj = new Object();
@@ -69,11 +73,13 @@ var populateQuestionsArray = function(){
 
 var displayQuizQuestions = function(){
 
-    if(questionCounter == 5 || countdown == 0){
+    // do not display questions if we're out of time or questions
+    if(questionCounter == quizQuestions.length || countdown == 0){
         console.log("Game ended!");
         return;
     }
 
+    // create div and use append child to add the question and choices elements  
     var questionPageEl = document.createElement("div");
     questionPageEl.className = "question-page";
     
@@ -104,10 +110,12 @@ var displayQuizQuestions = function(){
     questionPageEl.appendChild(thirdChoice);
     questionPageEl.appendChild(fourthChoice);
 
+    // apppending the question page element to the page content element
     pageContentEl.appendChild(questionPageEl);
 
 }
 
+// gets called when countdown is 0 or finished questions
 var displayScorePage = function(){
 
     var scoreDivEl = document.createElement("div");
@@ -139,8 +147,9 @@ var displayScorePage = function(){
     pageContentEl.appendChild(scoreDivEl);
 }
 
+// create a new h3 div letting the user know that his choice was correct / wrong - append to question page
 var correctAnswerDisplay = function(){
-    if(questionCounter == 5){
+    if(questionCounter == quizQuestions.length){
         return;
     }
     var questionPageElement = document.querySelector('.question-page');
@@ -154,7 +163,7 @@ var correctAnswerDisplay = function(){
 }
 
 var wrongAnswerDisplay = function(){
-    if(questionCounter == 5){
+    if(questionCounter == quizQuestions.length){
         return;
     }
     var questionPageElement = document.querySelector('.question-page');
@@ -166,6 +175,7 @@ var wrongAnswerDisplay = function(){
     questionPageElement.appendChild(wrongEl);
 }
 
+// removes the dynamically created objects
 var clearQuestionPage = function(){
     var questionPage = document.querySelector(".question-page");
     var theQuestion = document.querySelector(".the-question");
@@ -175,12 +185,13 @@ var clearQuestionPage = function(){
     buttons.remove();
 }
 
+// handles the countdown element and decrements the counter every 1s
 var startCounter = function(){
     countdown--;
     if(countdown > 0){
         secondsCounterEl.innerHTML = "Time: " + countdown;
     }
-    if(questionCounter == 5){
+    if(questionCounter == quizQuestions.length){
         clearInterval(timeInterval);
         finalScore = countdown;
         displayScorePage();
@@ -194,13 +205,15 @@ var startCounter = function(){
     }
 }
 
-
+// Called when user clicks the start button
 var startQuizHandler = function(){
+    // clear the introPageEl from the main page and display questions
     introPageEl.style.display = 'none';
     populateQuestionsArray();
     displayQuizQuestions();
+
+    // call startCounter every 1000ms - setup globally so that we can clear it from any function
     timeInterval = setInterval(startCounter, 1000);
-    console.log();
 }
 
 var answerBtnHandler = function(event){
@@ -217,16 +230,15 @@ var answerBtnHandler = function(event){
         return;
     }
 
+    // checks which button was clicked using class name of the button
     switch(choice){
         case "choice-a":
             if(correctAnswer == "1"){
-                console.log("Correct answer");
                 questionCounter++;
                 clearQuestionPage();
                 displayQuizQuestions();
                 correctAnswerDisplay();
             }else{
-                console.log("Wrong answer.");
                 questionCounter++;
                 countdown = countdown - 10;
                 clearQuestionPage();
@@ -237,7 +249,6 @@ var answerBtnHandler = function(event){
             break;
         case "choice-b":
             if(correctAnswer == "2"){
-                console.log("This is correct!");
                 questionCounter++;
                 clearQuestionPage();
                 displayQuizQuestions();
@@ -321,10 +332,12 @@ var displayHighScores = function (){
 
 }
 
+// save scores in local storage as strings
 var saveScores = function(){
     localStorage.setItem("scores", JSON.stringify(highScores));
 }
 
+// load scores data from local storage
 var loadScores = function(){
     var savedScores = localStorage.getItem("scores");
 
@@ -382,6 +395,7 @@ var resetEverything = function(){
     secondsCounterEl.innerHTML = "Time: 0";
 }
 
+// create a function that checks which pageContentEl child was clicked
 startQuizBtn.addEventListener("click", startQuizHandler);
 pageContentEl.addEventListener("click", answerBtnHandler);
 pageContentEl.addEventListener("click", submitScore);
