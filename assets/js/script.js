@@ -218,6 +218,7 @@ var startQuizHandler = function(){
 
 var answerBtnHandler = function(event){
 
+    // if what was clicked is not a choice, exit function
     if(!event.target.matches(".choice")){
         return;
     }
